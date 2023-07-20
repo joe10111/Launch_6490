@@ -18,29 +18,41 @@ namespace Tourism.Controllers
         public IActionResult Index(int stateId)
         {
             var state = _context.States
-                .Include(s => s.Cities)
-                .Where(s => s.Id == stateId)
-                .First();
+            .Include(s => s.Cities)
+         .FirstOrDefault(s => s.Id == stateId);
+
+            if (state == null)
+            {
+                return NotFound();
+            }
 
             return View(state);
         }
-
-        public IActionResult New()
+        [Route("/states/{stateId:int}/cities/new")]
+        public IActionResult New(int stateId)
         {
-            var state = _context.States;
+            var state = _context.States.FirstOrDefault(s => s.Id == stateId);
+            if (state == null)
+            {
+                return NotFound();
+            }
 
             return View(state);
         }
 
-        //[Route("/states/{stateId:int}/cities")]
-        //public IActionResult Create(int stateId, City city)
-        //{
-        //    var city = _context.Cities.Find(stateId);
+        [HttpPost]
+        [Route("/states/{stateId:int}/cities")]
+        public IActionResult Create(int stateId, City city)
+        {
+            var state = _context.States
+            .Include(s => s.Cities)
+            .FirstOrDefault(s => s.Id == stateId);
 
-        //    _context.Add(city);
-        //    _context.SaveChanges();
+            state.Cities.Add(city);
 
-        //    return RedirectToAction();
-        //}
+            _context.SaveChanges();
+
+            return RedirectToAction("index", new { stateId = state.Id });
+        }
     }
 }

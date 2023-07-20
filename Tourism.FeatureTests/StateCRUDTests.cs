@@ -62,5 +62,43 @@ namespace Tourism.FeatureTests
 
             return context;
         }
+
+        [Fact]
+        public async Task Test_New_ReturnsForms()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/states/new");
+            var html = await response.Content.ReadAsStringAsync();
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.Contains("Make a new state", html);
+            Assert.Contains("<form method=\"post\" action=\"/states\">", html);
+        }
+
+        [Fact]
+        public async Task AddState_ReturnRedierectToShow()
+        {
+            var client = _factory.CreateClient();
+
+            var formData = new Dictionary<string, string>
+            {
+                { "Name", "Colorado" },
+                { "Abbreviation", "CO" }
+            };
+
+            // Act
+            var response = await client.PostAsync("/states", new FormUrlEncodedContent(formData));
+            var html = await response.Content.ReadAsStringAsync();
+
+            // Assert that we are redirected to a details page for the movie just created
+            response.EnsureSuccessStatusCode();
+       
+            Assert.Contains("Colorado", html);
+            Assert.Contains("CO", html);
+        }
     }
 }

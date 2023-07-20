@@ -36,12 +36,15 @@ Update the application so that the pre-existing CityCRUD tests will pass.
 Edit this file with your answers.
 
 1. Create a Diagram of the Request/Response cycle that would occur when a user creates a city.  Include as much detail as possible!  **Send and image/screenshot of your diagram to your instructors via slack.** (2 points)
-
+  
 2. How does a form submission know what request should be made? Use examples.
-
-3. Imagine you are explaining how to create a resource to a co-worker.  How would you describe how the controller action `Create` works?
-
+    A submission form knows what the request should be based of what we provide into the form method property.  For instance so far when creating related recourse we have used the `post` forum method so the forum knows to redirect and show updated information.
+   
+3. Imagine you are explaining how to create a resource to a co-worker. How would you describe how the controller action `Create` works?
+	Create is part of the CRUD operations that we can use in our MVC application. The create controller action method can handle the GET request for forums when a user wants to create a resources in the database. 
+    
 4. In our State creation functionality - what would happen if a user did not enter an Abbreviation before submitting the form?
+	It could throw a exception / error because the information we are passing in from the forum to the controller and then to the model is expecting the to display the Abbreviation. We could write some controller logic to pass in a null text value if the  Abbreviation is null but by default it would thrown an exception / error. 
 
 
 ## Rubric
